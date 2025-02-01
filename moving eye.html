@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eyeballs Follow Mouse</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+
+
+
+            background: radial-gradient(circle at center, #ff3019 10%, #cf0404 100%);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6),
+                       inset 0 0 15px rgba(255, 0, 0, 0.4);
+            animation: glowing 2s infinite alternate;
+
+
+
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        .eye-container {
+            position: absolute;
+            display: flex;
+            justify-content: space-between;
+            width: 200px;
+            height: 100px;
+            pointer-events: none; /* Prevents the eyes from blocking mouse events */
+        }
+
+        .eye {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+
+
+background: white;
+        }
+
+        /* Glowing effect when the mouse is near the eye */
+        .eye:hover {
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+            background-color: #cc482e; /* Brighter green when hovered */
+        }
+
+        .pupil {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            background-color: black;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="eye-container">
+        <div class="eye">
+            <div class="pupil"></div>
+        </div>
+        <div class="eye">
+            <div class="pupil"></div>
+        </div>
+    </div>
+
+    <script>
+        const eyes = document.querySelectorAll('.eye');
+        const pupils = document.querySelectorAll('.pupil');
+
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+
+            eyes.forEach((eye, index) => {
+                const eyeRect = eye.getBoundingClientRect();
+                const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+                const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+
+                const angle = Math.atan2(mouseY - eyeCenterY, mouseX - eyeCenterX);
+                const distance = Math.min(eyeRect.width / 4, eyeRect.height / 4); // Limit pupil movement
+
+                const pupilX = distance * Math.cos(angle);
+                const pupilY = distance * Math.sin(angle);
+
+                pupils[index].style.transform = `translate(-50%, -50%) translate(${pupilX}px, ${pupilY}px)`;
+            });
+        });
+    </script>
+
+</body>
+</html>
